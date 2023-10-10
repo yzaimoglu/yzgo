@@ -75,6 +75,10 @@ ConnectionStart:
 			goto ConnectionStart
 		}
 
+		utils.NonChildExec(func() {
+			slog.Infof("Connected to surrealdb at %s:%d", dbConfig.Host, dbConfig.Port)
+		})
+
 		surrealdb := &SurrealDB{
 			Config:   &dbConfig,
 			Database: db,

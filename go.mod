@@ -18,6 +18,7 @@ require (
 	github.com/mattn/go-runewidth v0.0.15 // indirect
 	github.com/philhofer/fwd v1.1.2 // indirect
 	github.com/rivo/uniseg v0.4.4 // indirect
+	github.com/rqlite/gorqlite v0.0.0-20230708021416-2acd02b70b79 // indirect
 	github.com/stripe/stripe-go/v74 v74.30.0 // indirect
 	github.com/surrealdb/surrealdb.go v0.2.1 // indirect
 	github.com/tinylib/msgp v1.1.8 // indirect

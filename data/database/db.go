@@ -1,6 +1,6 @@
 package data
 
-type Database interface {
+type NoSQLDatabase interface {
 	GetSingle(query string, vars interface{}) (interface{}, error)
 	GetMultiple(query string, vars interface{}) ([]interface{}, error)
 	Query(query string, vars interface{}) (interface{}, error)
@@ -8,6 +8,11 @@ type Database interface {
 	Create(table string, data interface{}) (interface{}, error)
 	Patch(id string, data interface{}) (interface{}, error)
 	Delete(id string) error
+	Init() error
+	Close() error
+}
+
+type SQLDatabase interface {
 	Init() error
 	Close() error
 }
