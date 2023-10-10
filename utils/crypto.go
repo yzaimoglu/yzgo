@@ -40,7 +40,7 @@ func HashPassword(password string) (encodedHash string, err error) {
 		KeyLength:   32,
 	}
 
-	salt, err := generateRandomBytes(p.SaltLength)
+	salt, err := GenerateRandomBytes(p.SaltLength)
 	if err != nil {
 		return "", err
 	}
@@ -60,7 +60,7 @@ func HashPassword(password string) (encodedHash string, err error) {
 // generateRandomBytes returns securely generated random bytes. It will return
 // an error if the system's secure random number generator fails to function
 // correctly, in which case the caller should not continue.
-func generateRandomBytes(n uint32) ([]byte, error) {
+func GenerateRandomBytes(n uint32) ([]byte, error) {
 	b := make([]byte, n)
 	_, err := rand.Read(b)
 	if err != nil {
@@ -74,7 +74,7 @@ func generateRandomBytes(n uint32) ([]byte, error) {
 func CheckPassword(password string, encodedHash string) (match bool, err error) {
 	// Extract the parameters, salt and derived key from the encoded password
 	// hash.
-	p, salt, hash, err := decodeHash(encodedHash)
+	p, salt, hash, err := DecodeHash(encodedHash)
 	if err != nil {
 		return false, err
 	}
@@ -93,7 +93,7 @@ func CheckPassword(password string, encodedHash string) (match bool, err error) 
 
 // decodeHash extracts the parameters, salt and derived key from an encoded
 // argon2 password hash.
-func decodeHash(encodedHash string) (p *Argon2Params, salt, hash []byte, err error) {
+func DecodeHash(encodedHash string) (p *Argon2Params, salt, hash []byte, err error) {
 	vals := strings.Split(encodedHash, "$")
 	if len(vals) != 6 {
 		return nil, nil, nil, ErrInvalidHash
