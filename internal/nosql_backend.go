@@ -23,6 +23,10 @@ func (backend *NoSQLBackend) Start() {
 	switch config.GetString(data_const.EnvDB) {
 	case data_const.DBTypeSurreal:
 		backend.Database = data_db.NewSurrealDB()
+	case data_const.DBTypeMongo:
+		backend.Logger.Fatal("MongoDB is not supported yet.")
+	case data_const.DBTypeArango:
+		backend.Logger.Fatal("ArangoDB is not supported yet.")
 	default:
 		backend.Logger.Fatal("Unknown database %s for database type %s", config.GetString(data_const.EnvDB), config.GetString(data_const.EnvDBType))
 		return

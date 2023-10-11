@@ -7,6 +7,8 @@ const (
 
 const (
 	DBTypeSurreal  = "surrealdb"
+	DBTypeMongo    = "mongodb"
+	DBTypeArango   = "arangodb"
 	DBTypePostgres = "postgres"
 	DBTypeMySQL    = "mysql"
 	DBTypeSQLite   = "sqlite"

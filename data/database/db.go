@@ -1,5 +1,7 @@
 package data
 
+import "gorm.io/gorm"
+
 type NoSQLDatabase interface {
 	GetSingle(query string, vars interface{}) (interface{}, error)
 	GetMultiple(query string, vars interface{}) ([]interface{}, error)
@@ -13,6 +15,7 @@ type NoSQLDatabase interface {
 }
 
 type SQLDatabase interface {
+	Orm() *gorm.DB
 	Init() error
 	Close() error
 }

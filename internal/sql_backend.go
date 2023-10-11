@@ -24,13 +24,13 @@ func (backend *SQLBackend) Start() {
 	case data_const.DBTypeSQLite:
 		backend.Database = data_db.NewSQLite()
 	case data_const.DBTypeMySQL:
-		backend.Logger.Fatal("MySQL is not yet supported.")
+		backend.Logger.Fatal("MySQL is not supported yet.")
 		return
 	case data_const.DBTypePostgres:
-		backend.Logger.Fatal("PostgreSQL is not yet supported.")
+		backend.Logger.Fatal("PostgreSQL is not supported yet.")
 		return
-	case data_const.DBTypeRQLite:
-		backend.Database = data_db.NewRQLite()
+	// case data_const.DBTypeRQLite:
+	// 	backend.Database = data_db.NewRQLite()
 	default:
 		backend.Logger.Fatal("Unknown database %s for database type %s", config.GetString(data_const.EnvDB), config.GetString(data_const.EnvDBType))
 		return
@@ -56,7 +56,6 @@ func (backend *SQLBackend) Stop() {
 }
 
 func (backend *SQLBackend) SysCallSetup() {
-	// Wait for a signal to exit.
 	sigchnl := make(chan os.Signal, 1)
 	signal.Notify(sigchnl)
 	exitchnl := make(chan int)

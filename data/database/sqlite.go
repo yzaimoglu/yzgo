@@ -72,3 +72,7 @@ func (db *SQLite) Close() error {
 	}
 	return rawDb.Close()
 }
+
+func (db *SQLite) Orm() *gorm.DB {
+	return db.Database
+}
