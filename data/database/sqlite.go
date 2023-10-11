@@ -72,5 +72,5 @@ func (db *SQLite) Init() error {
 }
 
 func (db *SQLite) Close() error {
-	return nil
+	return db.Database.Close()
 }
