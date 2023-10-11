@@ -34,7 +34,6 @@ func FromJsonToObjectMultiple(source [][]byte, destination interface{}) error {
 	return InterfaceToObject(destinationLocal, destination)
 }
 
-// Convert an interface to a struct
 func InterfaceToObject(input interface{}, output interface{}) error {
 	jsonObj, err := json.Marshal(input)
 	if err != nil {

@@ -1,7 +1,9 @@
 package data
 
+import "gorm.io/gorm"
+
 type Placeholder struct {
-	Id          string `json:"id" gorm:"primary_key"`
+	gorm.Model
 	VariableOne string `json:"variable_one"`
 	VariableTwo string `json:"variable_two"`
 }
