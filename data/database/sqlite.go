@@ -1,17 +1,17 @@
 package data
 
 import (
-	"database/sql"
 	"fmt"
 	"os"
 	"time"
 
 	"github.com/gookit/slog"
 	"github.com/yzaimoglu/yzgo/config"
-	data "github.com/yzaimoglu/yzgo/data/const"
+	data "github.com/yzaimoglu/yzgo/data"
+	data_const "github.com/yzaimoglu/yzgo/data/const"
 	"github.com/yzaimoglu/yzgo/utils"
-
-	_ "github.com/glebarez/go-sqlite"
+	"gorm.io/driver/sqlite"
+	"gorm.io/gorm"
 )
 
 type SQLiteConfig struct {
@@ -20,14 +20,14 @@ type SQLiteConfig struct {
 
 type SQLite struct {
 	Config   *SQLiteConfig
-	Database *sql.DB
+	Database *gorm.DB
 }
 
 func NewSQLite() *SQLite {
 ConnectionStart:
-	if config.GetBoolean(data.EnvDBEnabled) {
+	if config.GetBoolean(data_const.EnvDBEnabled) {
 		dbConfig := SQLiteConfig{
-			Database: config.GetString(data.EnvDBDatabase),
+			Database: config.GetString(data_const.EnvDBDatabase),
 		}
 
 		if _, err := os.Stat("db"); os.IsNotExist(err) {
@@ -40,8 +40,8 @@ ConnectionStart:
 			}
 		}
 
-		path := fmt.Sprintf("db/%s.db?_pragma=journal_mode(WAL)&_pragma=busy_timeout(5000)", dbConfig.Database)
-		db, err := sql.Open("sqlite", path)
+		path := fmt.Sprintf("db/%s.db?journal_mode=WAL&busy_timeout=5000", dbConfig.Database)
+		db, err := gorm.Open(sqlite.Open(path), &gorm.Config{})
 		if err != nil {
 			slog.Errorf("Error connecting to SQLite: %v", err)
 			slog.Errorf("Retrying in 10 seconds...")
@@ -51,13 +51,7 @@ ConnectionStart:
 		}
 
 		utils.NonChildExec(func() {
-			var version string
-			versionQuery := db.QueryRow("select sqlite_version()")
-			if err := versionQuery.Scan(&version); err != nil {
-				slog.Errorf("Error connecting to SQLite: %v", err)
-				panic(err)
-			}
-			slog.Infof("Connected to sqlite v%s at path %s", version, path)
+			slog.Infof("Connected to sqlite at path %s", path)
 		})
 		return &SQLite{
 			Config:   &dbConfig,
@@ -68,9 +62,13 @@ ConnectionStart:
 }
 
 func (db *SQLite) Init() error {
-	return nil
+	return db.Database.AutoMigrate(&data.Placeholder{})
 }
 
 func (db *SQLite) Close() error {
-	return db.Database.Close()
+	rawDb, err := db.Database.DB()
+	if err != nil {
+		return err
+	}
+	return rawDb.Close()
 }
